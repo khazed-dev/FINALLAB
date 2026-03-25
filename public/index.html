@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="vi">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -10,33 +10,33 @@
     <div class="public-shell">
       <header class="public-hero">
         <div>
-          <p class="eyebrow">DoS / DDoS Demo Target</p>
+          <p class="eyebrow">Mục tiêu Demo DoS / DDoS</p>
           <h1>Security Operations Mini Dashboard</h1>
           <p class="lede">
-            Lightweight public service running behind Nginx and Node.js on AWS EC2 Ubuntu.
+            Dịch vụ public nhẹ chạy phía sau Nginx và Node.js trên AWS EC2 Ubuntu.
           </p>
         </div>
         <div class="hero-actions">
-          <a class="button primary" href="/dashboard">Open SOC Dashboard</a>
-          <button class="button ghost" id="pingButton">Test /api/ping</button>
+          <a class="button primary" href="/dashboard">Mở Dashboard SOC</a>
+          <button class="button ghost" id="pingButton">Kiểm tra /api/ping</button>
         </div>
       </header>
 
       <section class="public-grid">
         <article class="info-card">
-          <span class="badge ok">Public Service</span>
-          <h2>Reverse Proxy Ready</h2>
-          <p>Nginx fronts the Node.js app and exposes a protected stub status endpoint.</p>
+          <span class="badge ok">Dịch vụ Public</span>
+          <h2>Sẵn sàng Reverse Proxy</h2>
+          <p>Nginx đứng trước ứng dụng Node.js và cung cấp endpoint `stub_status` được bảo vệ.</p>
         </article>
         <article class="info-card">
           <span class="badge info">Realtime</span>
-          <h2>Live Telemetry</h2>
-          <p>CPU, RAM, RPS, connection state, error rate, and top client IPs are collected live.</p>
+          <h2>Giám sát Trực tiếp</h2>
+          <p>CPU, RAM, RPS, trạng thái kết nối, tỷ lệ lỗi và top IP client được thu thập theo thời gian thực.</p>
         </article>
         <article class="info-card">
-          <span class="badge warning">Defense Controls</span>
-          <h2>Nginx Mitigation</h2>
-          <p>Rate limit, connection limit, emergency mode, and reload actions are managed safely.</p>
+          <span class="badge warning">Điều khiển Phòng thủ</span>
+          <h2>Giảm thiểu bằng Nginx</h2>
+          <p>Rate limit, connection limit, emergency mode và thao tác reload được quản lý an toàn.</p>
         </article>
       </section>
 
@@ -50,8 +50,8 @@
           <code>/dashboard</code>
         </div>
         <div>
-          <span class="status-label">Last Ping</span>
-          <strong id="pingResult">Not tested</strong>
+          <span class="status-label">Lần Ping Gần nhất</span>
+          <strong id="pingResult">Chưa kiểm tra</strong>
         </div>
       </section>
     </div>

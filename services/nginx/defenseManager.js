@@ -56,48 +56,48 @@ class DefenseManager extends EventEmitter {
   async enableRateLimit() {
     return this.updateState(
       { rateLimitEnabled: true, lastAction: "enable-rate-limit" },
-      "Rate limiting enabled"
+      "Đã bật rate limiting"
     );
   }
 
   async disableRateLimit() {
     return this.updateState(
       { rateLimitEnabled: false, lastAction: "disable-rate-limit" },
-      "Rate limiting disabled"
+      "Đã tắt rate limiting"
     );
   }
 
   async enableConnLimit() {
     return this.updateState(
       { connLimitEnabled: true, lastAction: "enable-conn-limit" },
-      "Connection limiting enabled"
+      "Đã bật giới hạn kết nối"
     );
   }
 
   async disableConnLimit() {
     return this.updateState(
       { connLimitEnabled: false, lastAction: "disable-conn-limit" },
-      "Connection limiting disabled"
+      "Đã tắt giới hạn kết nối"
     );
   }
 
   async enableEmergencyMode() {
     return this.updateState(
       { emergencyModeEnabled: true, lastAction: "enable-emergency-mode" },
-      "Emergency mode enabled"
+      "Đã bật emergency mode"
     );
   }
 
   async disableEmergencyMode() {
     return this.updateState(
       { emergencyModeEnabled: false, lastAction: "disable-emergency-mode" },
-      "Emergency mode disabled"
+      "Đã tắt emergency mode"
     );
   }
 
   async reloadOnly() {
     await this.runReloadFlow([]);
-    return { message: "Nginx reloaded" };
+    return { message: "Đã reload Nginx" };
   }
 
   async updateState(patch, message) {

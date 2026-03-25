@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="vi">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -11,69 +11,69 @@
       <header class="dashboard-header">
         <div>
           <p class="eyebrow">Security Operations Mini Dashboard</p>
-          <h1>DoS / DDoS Attack and Defense Monitor</h1>
+          <h1>Giám sát Tấn công và Phòng thủ DoS / DDoS</h1>
         </div>
         <div class="header-status">
           <div class="header-chip">
-            <span>Demo Mode</span>
-            <strong id="modeBadge" class="pill neutral">NORMAL</strong>
+            <span>Chế độ Demo</span>
+            <strong id="modeBadge" class="pill neutral">BÌNH THƯỜNG</strong>
           </div>
           <div class="header-chip">
-            <span>Overall Status</span>
-            <strong id="overallBadge" class="pill healthy">Healthy</strong>
+            <span>Trạng thái Tổng thể</span>
+            <strong id="overallBadge" class="pill healthy">Ổn định</strong>
           </div>
           <div class="header-chip">
-            <span>Current Time</span>
+            <span>Thời gian hiện tại</span>
             <strong id="currentClock">--:--:--</strong>
           </div>
-          <button class="button ghost compact" id="logoutButton">Logout</button>
+          <button class="button ghost compact" id="logoutButton">Đăng xuất</button>
         </div>
       </header>
 
       <section class="panel-grid metrics-grid">
-        <article class="metric-panel" id="cpuCard"><div class="panel-heading"><span>CPU Usage</span><span class="panel-icon">!</span></div><strong id="cpuValue">0%</strong><small id="cpuMeta">Alert at 75%</small></article>
-        <article class="metric-panel" id="ramCard"><div class="panel-heading"><span>RAM Usage</span><span class="panel-icon">!</span></div><strong id="ramValue">0%</strong><small>Live memory pressure</small></article>
-        <article class="metric-panel" id="rpsCard"><div class="panel-heading"><span>Requests / Sec</span><span class="panel-icon">!</span></div><strong id="rpsValue">0</strong><small id="rpsMeta">Watching for spike vs baseline</small></article>
-        <article class="metric-panel" id="connCard"><div class="panel-heading"><span>Active Connections</span><span class="panel-icon">!</span></div><strong id="connValue">0</strong><small id="connMeta">Reading / Writing / Waiting</small></article>
-        <article class="metric-panel" id="latencyCard"><div class="panel-heading"><span>Avg Response Time</span><span class="panel-icon">!</span></div><strong id="latencyValue">0s</strong><small id="latencyMeta">10-second rolling average</small></article>
-        <article class="metric-panel" id="errorCard"><div class="panel-heading"><span>5xx Error Rate</span><span class="panel-icon">!</span></div><strong id="errorValue">0%</strong><small>Service degraded over 3%</small></article>
+        <article class="metric-panel" id="cpuCard"><div class="panel-heading"><span>Mức dùng CPU</span><span class="panel-icon">!</span></div><strong id="cpuValue">0%</strong><small id="cpuMeta">Cảnh báo từ 75%</small></article>
+        <article class="metric-panel" id="ramCard"><div class="panel-heading"><span>Mức dùng RAM</span><span class="panel-icon">!</span></div><strong id="ramValue">0%</strong><small>Áp lực bộ nhớ hiện thời</small></article>
+        <article class="metric-panel" id="rpsCard"><div class="panel-heading"><span>Request / Giây</span><span class="panel-icon">!</span></div><strong id="rpsValue">0</strong><small id="rpsMeta">Theo dõi spike so với baseline</small></article>
+        <article class="metric-panel" id="connCard"><div class="panel-heading"><span>Kết nối đang hoạt động</span><span class="panel-icon">!</span></div><strong id="connValue">0</strong><small id="connMeta">Reading / Writing / Waiting</small></article>
+        <article class="metric-panel" id="latencyCard"><div class="panel-heading"><span>Thời gian phản hồi TB</span><span class="panel-icon">!</span></div><strong id="latencyValue">0s</strong><small id="latencyMeta">Trung bình cuộn 10 giây</small></article>
+        <article class="metric-panel" id="errorCard"><div class="panel-heading"><span>Tỷ lệ lỗi 5xx</span><span class="panel-icon">!</span></div><strong id="errorValue">0%</strong><small>Dịch vụ suy giảm nếu vượt 3%</small></article>
       </section>
 
       <section class="panel-grid overview-grid">
         <article class="surface-card">
-          <div class="section-head"><h2>System Metrics</h2><span class="badge info" id="systemBadge">Healthy</span></div>
+          <div class="section-head"><h2>Chỉ số Hệ thống</h2><span class="badge info" id="systemBadge">Ổn định</span></div>
           <div class="stat-list">
             <div><span>Load Average</span><strong id="loadValue">0 / 0 / 0</strong></div>
-            <div><span>Network In</span><strong id="netInValue">0 B/s</strong></div>
-            <div><span>Network Out</span><strong id="netOutValue">0 B/s</strong></div>
-            <div><span>Disk Usage</span><strong id="diskValue">0%</strong></div>
+            <div><span>Lưu lượng vào</span><strong id="netInValue">0 B/s</strong></div>
+            <div><span>Lưu lượng ra</span><strong id="netOutValue">0 B/s</strong></div>
+            <div><span>Mức dùng đĩa</span><strong id="diskValue">0%</strong></div>
           </div>
         </article>
 
         <article class="surface-card">
-          <div class="section-head"><h2>Web Metrics</h2><span class="badge ok" id="webBadge">Operational</span></div>
+          <div class="section-head"><h2>Chỉ số Web</h2><span class="badge ok" id="webBadge">Hoạt động tốt</span></div>
           <div class="stat-list">
-            <div><span>Success Rate</span><strong id="successValue">100%</strong></div>
-            <div><span>4xx Rate</span><strong id="fourxxValue">0%</strong></div>
+            <div><span>Tỷ lệ thành công</span><strong id="successValue">100%</strong></div>
+            <div><span>Tỷ lệ 4xx</span><strong id="fourxxValue">0%</strong></div>
             <div><span>2xx / 4xx / 5xx</span><strong id="statusCountsValue">0 / 0 / 0</strong></div>
             <div><span>Reading / Writing / Waiting</span><strong id="rwvValue">0 / 0 / 0</strong></div>
           </div>
         </article>
 
         <article class="surface-card attack-card">
-          <div class="section-head"><h2>Attack Indicators</h2><span class="badge warning" id="attackBadge">Normal</span></div>
+          <div class="section-head"><h2>Dấu hiệu Tấn công</h2><span class="badge warning" id="attackBadge">Bình thường</span></div>
           <div class="stat-list">
-            <div><span>Current Mode</span><strong id="attackModeValue">NORMAL</strong></div>
-            <div><span>Detected Pattern</span><strong id="attackPatternValue">NONE</strong></div>
-            <div><span>Unique Source IPs</span><strong id="uniqueIpValue">0</strong></div>
-            <div><span>Top Source Dominance</span><strong id="dominanceValue">0%</strong></div>
+            <div><span>Chế độ hiện tại</span><strong id="attackModeValue">BÌNH THƯỜNG</strong></div>
+            <div><span>Mẫu phát hiện</span><strong id="attackPatternValue">KHÔNG</strong></div>
+            <div><span>Số IP nguồn duy nhất</span><strong id="uniqueIpValue">0</strong></div>
+            <div><span>Mức chi phối IP đứng đầu</span><strong id="dominanceValue">0%</strong></div>
           </div>
           <div class="attack-flags">
-            <span class="badge neutral" id="abnormalBadge">No abnormal traffic</span>
-            <span class="badge neutral" id="spikeBadge">No spike warning</span>
+            <span class="badge neutral" id="abnormalBadge">Không có lưu lượng bất thường</span>
+            <span class="badge neutral" id="spikeBadge">Không có cảnh báo spike</span>
           </div>
           <div class="top-sources">
-            <h3>Top 5 Source IPs</h3>
+            <h3>Top 5 IP nguồn</h3>
             <ul id="topSourcesList" class="source-list"></ul>
           </div>
         </article>
@@ -81,25 +81,25 @@
 
       <section class="panel-grid lower-grid">
         <article class="surface-card defense-card">
-          <div class="section-head"><h2>Defense Controls</h2><span class="badge info" id="defenseBadge">Idle</span></div>
+          <div class="section-head"><h2>Điều khiển Phòng thủ</h2><span class="badge info" id="defenseBadge">Nhàn rỗi</span></div>
           <div class="button-grid">
-            <button class="button primary" data-action="rate-limit-enable">Enable Rate Limiting</button>
-            <button class="button ghost" data-action="rate-limit-disable">Disable Rate Limiting</button>
-            <button class="button primary" data-action="conn-limit-enable">Enable Connection Limiting</button>
-            <button class="button ghost" data-action="conn-limit-disable">Disable Connection Limiting</button>
-            <button class="button danger" data-action="emergency-enable">Enable Emergency Mode</button>
-            <button class="button ghost" data-action="emergency-disable">Disable Emergency Mode</button>
-            <button class="button secondary" data-action="reload">Reload Nginx</button>
+            <button class="button primary" data-action="rate-limit-enable">Bật Rate Limiting</button>
+            <button class="button ghost" data-action="rate-limit-disable">Tắt Rate Limiting</button>
+            <button class="button primary" data-action="conn-limit-enable">Bật Giới hạn Kết nối</button>
+            <button class="button ghost" data-action="conn-limit-disable">Tắt Giới hạn Kết nối</button>
+            <button class="button danger" data-action="emergency-enable">Bật Emergency Mode</button>
+            <button class="button ghost" data-action="emergency-disable">Tắt Emergency Mode</button>
+            <button class="button secondary" data-action="reload">Tải lại Nginx</button>
           </div>
           <div class="stat-list compact">
-            <div><span>Rate Limit</span><strong id="rateLimitState">OFF</strong></div>
-            <div><span>Conn Limit</span><strong id="connLimitState">OFF</strong></div>
-            <div><span>Emergency Mode</span><strong id="emergencyState">OFF</strong></div>
+            <div><span>Rate Limit</span><strong id="rateLimitState">TẮT</strong></div>
+            <div><span>Conn Limit</span><strong id="connLimitState">TẮT</strong></div>
+            <div><span>Emergency Mode</span><strong id="emergencyState">TẮT</strong></div>
           </div>
         </article>
 
         <article class="surface-card chart-card">
-          <div class="section-head"><h2>Realtime Charts</h2><span class="badge info">Last 60 seconds</span></div>
+          <div class="section-head"><h2>Biểu đồ Realtime</h2><span class="badge info">60 giây gần nhất</span></div>
           <p id="chartError" class="chart-error" hidden></p>
           <div class="chart-grid" id="chartGrid">
             <div class="chart-tile"><canvas id="cpuChart"></canvas></div>
@@ -113,7 +113,7 @@
 
       <section class="panel-grid logs-grid">
         <article class="surface-card">
-          <div class="section-head"><h2>Realtime Logs</h2><span class="badge info">Timeline</span></div>
+          <div class="section-head"><h2>Log Realtime</h2><span class="badge info">Dòng thời gian</span></div>
           <ul id="logList" class="log-list"></ul>
         </article>
       </section>

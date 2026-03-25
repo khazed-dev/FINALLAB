@@ -131,7 +131,7 @@ function createSessionAuth({
     }
     return res.status(401).json({
       ok: false,
-      error: "Authentication required"
+      error: "Yêu cầu đăng nhập"
     });
   };
 
@@ -142,7 +142,7 @@ function createSessionAuth({
     if (submittedUser !== normalizedUser || submittedPass !== normalizedPass) {
       return res.status(401).json({
         ok: false,
-        error: "Invalid username or password"
+        error: "Sai tên đăng nhập hoặc mật khẩu"
       });
     }
 
@@ -163,11 +163,11 @@ function createSessionAuth({
     try {
       const cookies = parseCookies(socket.handshake.headers.cookie);
       if (!validateToken(cookies[sessionCookieName])) {
-        return next(new Error("Authentication required"));
+        return next(new Error("Yêu cầu đăng nhập"));
       }
       return next();
     } catch (error) {
-      return next(new Error("Authentication required"));
+      return next(new Error("Yêu cầu đăng nhập"));
     }
   };
 

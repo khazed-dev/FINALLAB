@@ -57,6 +57,26 @@ const statusClasses = {
   Mitigating: "mitigating"
 };
 
+const modeLabels = {
+  NORMAL: "BÌNH THƯỜNG",
+  "UNDER DOS": "ĐANG BỊ DOS",
+  "UNDER DDOS": "ĐANG BỊ DDOS",
+  "DEFENSE ENABLED": "PHÒNG THỦ ĐANG BẬT"
+};
+
+const patternLabels = {
+  NONE: "KHÔNG",
+  DOS: "DOS",
+  DDOS: "DDOS"
+};
+
+const overallStatusLabels = {
+  Healthy: "Ổn định",
+  Warning: "Cảnh báo",
+  "Under Attack": "Đang bị tấn công",
+  Mitigating: "Đang giảm thiểu"
+};
+
 function formatBytesPerSecond(bytes) {
   if (bytes < 1024) return `${bytes.toFixed(0)} B/s`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB/s`;
@@ -130,10 +150,10 @@ function initCharts() {
   }
 
   chartStore.cpu = createChart("cpuChart", "CPU %", "rgba(0, 224, 255, 1)");
-  chartStore.rps = createChart("rpsChart", "Requests / Sec", "rgba(255, 184, 0, 1)");
-  chartStore.conn = createChart("connChart", "Active Connections", "rgba(255, 92, 92, 1)");
-  chartStore.latency = createChart("latencyChart", "Avg Response Time", "rgba(140, 124, 255, 1)");
-  chartStore.error = createChart("errorChart", "5xx Error Rate", "rgba(255, 106, 148, 1)");
+  chartStore.rps = createChart("rpsChart", "Request / Giây", "rgba(255, 184, 0, 1)");
+  chartStore.conn = createChart("connChart", "Kết nối Hoạt động", "rgba(255, 92, 92, 1)");
+  chartStore.latency = createChart("latencyChart", "Thời gian phản hồi TB", "rgba(140, 124, 255, 1)");
+  chartStore.error = createChart("errorChart", "Tỷ lệ lỗi 5xx", "rgba(255, 106, 148, 1)");
   chartsReady = true;
 
   if (pendingHistory.length) {
@@ -168,7 +188,7 @@ function updateCharts(points) {
 function updateTopSources(sources) {
   dom.topSourcesList.innerHTML = "";
   if (!sources.length) {
-    dom.topSourcesList.innerHTML = "<li class=\"source-item muted\">No source traffic yet</li>";
+    dom.topSourcesList.innerHTML = "<li class=\"source-item muted\">Chưa có lưu lượng nguồn</li>";
     return;
   }
 
@@ -185,13 +205,13 @@ function updateLogs(items) {
   items.forEach((item) => {
     const li = document.createElement("li");
     li.className = `log-item ${item.level}`;
-    li.innerHTML = `<span>${new Date(item.timestamp).toLocaleTimeString()}</span><strong>${item.message}</strong>`;
+    li.innerHTML = `<span>${new Date(item.timestamp).toLocaleTimeString("vi-VN")}</span><strong>${item.message}</strong>`;
     dom.logList.appendChild(li);
   });
 }
 
 function refreshClock() {
-  dom.currentClock.textContent = new Date().toLocaleTimeString();
+  dom.currentClock.textContent = new Date().toLocaleTimeString("vi-VN");
 }
 
 function updateDashboard(snapshot) {
@@ -203,18 +223,22 @@ function updateDashboard(snapshot) {
         ? "mitigating"
         : "neutral";
 
-  setPill(dom.modeBadge, attack.mode, modeClass);
-  setPill(dom.overallBadge, attack.overallStatus, statusClasses[attack.overallStatus]);
+  setPill(dom.modeBadge, modeLabels[attack.mode] || attack.mode, modeClass);
+  setPill(
+    dom.overallBadge,
+    overallStatusLabels[attack.overallStatus] || attack.overallStatus,
+    statusClasses[attack.overallStatus]
+  );
 
   dom.cpuValue.textContent = `${system.cpuPercent.toFixed(1)}%`;
-  dom.cpuMeta.textContent = `Baseline alert at ${attack.thresholds.cpuAlert}%`;
+  dom.cpuMeta.textContent = `Cảnh báo từ ${attack.thresholds.cpuAlert}%`;
   dom.ramValue.textContent = `${system.memoryPercent.toFixed(1)}%`;
   dom.rpsValue.textContent = web.requestsPerSec.toFixed(1);
-  dom.rpsMeta.textContent = `Spike threshold ${attack.thresholds.requestSpike.toFixed(1)} req/s`;
+  dom.rpsMeta.textContent = `Ngưỡng spike ${attack.thresholds.requestSpike.toFixed(1)} req/s`;
   dom.connValue.textContent = `${web.activeConnections}`;
   dom.connMeta.textContent = `${web.reading} / ${web.writing} / ${web.waiting}`;
   dom.latencyValue.textContent = `${web.averageResponseTime.toFixed(3)}s`;
-  dom.latencyMeta.textContent = `Alert over ${attack.thresholds.latencyAlert.toFixed(3)}s`;
+  dom.latencyMeta.textContent = `Cảnh báo nếu vượt ${attack.thresholds.latencyAlert.toFixed(3)}s`;
   dom.errorValue.textContent = `${web.fiveXxRate.toFixed(2)}%`;
 
   dom.loadValue.textContent = `${system.loadAverage.one.toFixed(2)} / ${system.loadAverage.five.toFixed(2)} / ${system.loadAverage.fifteen.toFixed(2)}`;
@@ -225,25 +249,25 @@ function updateDashboard(snapshot) {
   dom.fourxxValue.textContent = `${web.fourXxRate.toFixed(2)}%`;
   dom.statusCountsValue.textContent = `${web.statusCounts["2xx"]} / ${web.statusCounts["4xx"]} / ${web.statusCounts["5xx"]}`;
   dom.rwvValue.textContent = `${web.reading} / ${web.writing} / ${web.waiting}`;
-  dom.attackModeValue.textContent = attack.mode;
-  dom.attackPatternValue.textContent = attack.detectedPattern;
+  dom.attackModeValue.textContent = modeLabels[attack.mode] || attack.mode;
+  dom.attackPatternValue.textContent = patternLabels[attack.detectedPattern] || attack.detectedPattern;
   dom.uniqueIpValue.textContent = `${attack.uniqueSourceCount}`;
   dom.dominanceValue.textContent = `${attack.dominantSourceShare.toFixed(2)}%`;
 
-  setBadge(dom.systemBadge, system.cpuPercent >= 75 ? "System Warning" : "Healthy", system.cpuPercent >= 75 ? "danger" : "ok");
-  setBadge(dom.webBadge, web.fiveXxRate > 3 ? "Service Degraded" : "Operational", web.fiveXxRate > 3 ? "danger" : "ok");
-  setBadge(dom.attackBadge, attack.overallStatus, statusClasses[attack.overallStatus]);
-  setBadge(dom.abnormalBadge, attack.abnormalTrafficDetected ? "Abnormal traffic detected" : "No abnormal traffic", attack.abnormalTrafficDetected ? "danger" : "neutral");
-  setBadge(dom.spikeBadge, attack.spikeWarning ? "Spike warning active" : "No spike warning", attack.spikeWarning ? "warning" : "neutral");
+  setBadge(dom.systemBadge, system.cpuPercent >= 75 ? "Cảnh báo hệ thống" : "Ổn định", system.cpuPercent >= 75 ? "danger" : "ok");
+  setBadge(dom.webBadge, web.fiveXxRate > 3 ? "Dịch vụ suy giảm" : "Hoạt động tốt", web.fiveXxRate > 3 ? "danger" : "ok");
+  setBadge(dom.attackBadge, overallStatusLabels[attack.overallStatus] || attack.overallStatus, statusClasses[attack.overallStatus]);
+  setBadge(dom.abnormalBadge, attack.abnormalTrafficDetected ? "Phát hiện lưu lượng bất thường" : "Không có lưu lượng bất thường", attack.abnormalTrafficDetected ? "danger" : "neutral");
+  setBadge(dom.spikeBadge, attack.spikeWarning ? "Đang có cảnh báo spike" : "Không có cảnh báo spike", attack.spikeWarning ? "warning" : "neutral");
   setBadge(
     dom.defenseBadge,
-    defense.emergencyModeEnabled ? "Emergency Active" : defense.rateLimitEnabled || defense.connLimitEnabled ? "Controls Enabled" : "Idle",
+    defense.emergencyModeEnabled ? "Emergency đang bật" : defense.rateLimitEnabled || defense.connLimitEnabled ? "Đã bật phòng thủ" : "Nhàn rỗi",
     defense.emergencyModeEnabled ? "mitigating" : defense.rateLimitEnabled || defense.connLimitEnabled ? "info" : "neutral"
   );
 
-  dom.rateLimitState.textContent = defense.rateLimitEnabled ? "ON" : "OFF";
-  dom.connLimitState.textContent = defense.connLimitEnabled ? "ON" : "OFF";
-  dom.emergencyState.textContent = defense.emergencyModeEnabled ? "ON" : "OFF";
+  dom.rateLimitState.textContent = defense.rateLimitEnabled ? "BẬT" : "TẮT";
+  dom.connLimitState.textContent = defense.connLimitEnabled ? "BẬT" : "TẮT";
+  dom.emergencyState.textContent = defense.emergencyModeEnabled ? "BẬT" : "TẮT";
 
   applyAlert(dom.cards.cpu, system.cpuPercent >= 75 ? "state-danger" : system.cpuPercent >= 60 ? "state-warning" : "state-ok");
   applyAlert(dom.cards.ram, system.memoryPercent >= 85 ? "state-danger" : system.memoryPercent >= 70 ? "state-warning" : "state-ok");
@@ -269,7 +293,7 @@ async function callDefenseAction(action) {
   const response = await fetch(routeMap[action], { method: "POST" });
   const data = await response.json();
   if (!response.ok || !data.ok) {
-    throw new Error(data.error || "Action failed");
+    throw new Error(data.error || "Thao tác thất bại");
   }
 }
 
@@ -279,7 +303,7 @@ function bindDefenseButtons() {
       const { action } = button.dataset;
       const originalText = button.textContent;
       button.disabled = true;
-      button.textContent = "Working...";
+      button.textContent = "Đang xử lý...";
 
       try {
         await callDefenseAction(action);
@@ -320,7 +344,7 @@ async function ensureChartLibrary() {
     try {
       await loadScript("https://cdn.jsdelivr.net/npm/chart.js");
     } catch (fallbackError) {
-      throw new Error("Unable to load Chart.js");
+      throw new Error("Không thể tải Chart.js");
     }
   }
 }
@@ -343,7 +367,7 @@ async function boot() {
     await ensureChartLibrary();
     initCharts();
   } catch (error) {
-    showChartError("Realtime charts could not be initialized. Check Chart.js path or browser console.");
+    showChartError("Không thể khởi tạo biểu đồ realtime. Hãy kiểm tra đường dẫn Chart.js hoặc console của trình duyệt.");
     console.error(error);
   }
 

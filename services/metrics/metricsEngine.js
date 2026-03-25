@@ -184,14 +184,14 @@ class MetricsEngine extends EventEmitter {
       this.eventLogService.addEvent({
         level: current.attack.mode === "NORMAL" ? "info" : "warning",
         type: "attack-state",
-        message: `Mode changed to ${current.attack.mode}`
+        message: `Chế độ đã chuyển sang ${current.attack.mode}`
       });
 
       if (current.attack.mode === "UNDER DOS" || current.attack.mode === "UNDER DDOS") {
         this.eventLogService.addEvent({
           level: "critical",
           type: "attack-started",
-          message: `Attack started: ${current.attack.mode}`
+          message: `Tấn công bắt đầu: ${current.attack.mode}`
         });
       }
     }
@@ -200,7 +200,7 @@ class MetricsEngine extends EventEmitter {
       this.eventLogService.addEvent({
         level: "warning",
         type: "traffic-spike",
-        message: `Traffic spike detected at ${current.web.requestsPerSec} req/s`
+        message: `Phát hiện spike lưu lượng tại mức ${current.web.requestsPerSec} req/s`
       });
     }
 
@@ -208,7 +208,7 @@ class MetricsEngine extends EventEmitter {
       this.eventLogService.addEvent({
         level: "warning",
         type: "latency",
-        message: `High latency detected at ${current.web.averageResponseTime}s average response time`
+        message: `Phát hiện độ trễ cao với thời gian phản hồi trung bình ${current.web.averageResponseTime}s`
       });
     }
 
@@ -216,7 +216,7 @@ class MetricsEngine extends EventEmitter {
       this.eventLogService.addEvent({
         level: "info",
         type: "mitigation",
-        message: "Mitigation active"
+        message: "Cơ chế giảm thiểu đang hoạt động"
       });
     }
 
@@ -226,7 +226,7 @@ class MetricsEngine extends EventEmitter {
       this.eventLogService.addEvent({
         level: "info",
         type: "defense",
-        message: `Defense state updated: rate=${current.defense.rateLimitEnabled}, conn=${current.defense.connLimitEnabled}, emergency=${current.defense.emergencyModeEnabled}`
+        message: `Trạng thái phòng thủ đã cập nhật: rate=${current.defense.rateLimitEnabled}, conn=${current.defense.connLimitEnabled}, emergency=${current.defense.emergencyModeEnabled}`
       });
     }
 
@@ -235,7 +235,7 @@ class MetricsEngine extends EventEmitter {
         this.eventLogService.addWithCooldown(`${name}-collector-error`, 30000, {
           level: "warning",
           type: "collector-error",
-          message: `${name} collector issue: ${error}`
+          message: `Collector ${name} gặp lỗi: ${error}`
         });
       }
     });

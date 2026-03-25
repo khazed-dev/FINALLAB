@@ -9,7 +9,7 @@ loginForm?.addEventListener("submit", async (event) => {
     password: formData.get("password")
   };
 
-  loginMessage.textContent = "Signing in...";
+  loginMessage.textContent = "Đang đăng nhập...";
 
   try {
     const response = await fetch("/auth/login", {
@@ -22,7 +22,7 @@ loginForm?.addEventListener("submit", async (event) => {
 
     const data = await response.json();
     if (!response.ok || !data.ok) {
-      throw new Error(data.error || "Login failed");
+      throw new Error(data.error || "Đăng nhập thất bại");
     }
 
     window.location.href = "/dashboard";
