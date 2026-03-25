@@ -1,0 +1,37 @@
+{
+  "name": "security-operations-mini-dashboard",
+  "version": "1.0.0",
+  "description": "Realtime SOC-style mini dashboard for DoS/DDoS demo on AWS EC2 Ubuntu",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "nodemon server/index.js",
+    "pm2:start": "pm2 start ecosystem.config.js --env production",
+    "pm2:reload": "pm2 reload security-ops-dashboard",
+    "pm2:logs": "pm2 logs security-ops-dashboard"
+  },
+  "keywords": [
+    "security",
+    "soc",
+    "dashboard",
+    "dos",
+    "ddos",
+    "nginx",
+    "express",
+    "socket.io"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "chart.js": "^4.5.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

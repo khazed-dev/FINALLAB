@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Security Operations Mini Dashboard</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body class="theme-public">
+    <div class="public-shell">
+      <header class="public-hero">
+        <div>
+          <p class="eyebrow">DoS / DDoS Demo Target</p>
+          <h1>Security Operations Mini Dashboard</h1>
+          <p class="lede">
+            Lightweight public service running behind Nginx and Node.js on AWS EC2 Ubuntu.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <a class="button primary" href="/dashboard">Open SOC Dashboard</a>
+          <button class="button ghost" id="pingButton">Test /api/ping</button>
+        </div>
+      </header>
+
+      <section class="public-grid">
+        <article class="info-card">
+          <span class="badge ok">Public Service</span>
+          <h2>Reverse Proxy Ready</h2>
+          <p>Nginx fronts the Node.js app and exposes a protected stub status endpoint.</p>
+        </article>
+        <article class="info-card">
+          <span class="badge info">Realtime</span>
+          <h2>Live Telemetry</h2>
+          <p>CPU, RAM, RPS, connection state, error rate, and top client IPs are collected live.</p>
+        </article>
+        <article class="info-card">
+          <span class="badge warning">Defense Controls</span>
+          <h2>Nginx Mitigation</h2>
+          <p>Rate limit, connection limit, emergency mode, and reload actions are managed safely.</p>
+        </article>
+      </section>
+
+      <section class="status-strip">
+        <div>
+          <span class="status-label">Endpoint</span>
+          <code>/api/ping</code>
+        </div>
+        <div>
+          <span class="status-label">Dashboard</span>
+          <code>/dashboard</code>
+        </div>
+        <div>
+          <span class="status-label">Last Ping</span>
+          <strong id="pingResult">Not tested</strong>
+        </div>
+      </section>
+    </div>
+
+    <script src="/static/public-app.js"></script>
+  </body>
+</html>
