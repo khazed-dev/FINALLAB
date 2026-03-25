@@ -100,12 +100,13 @@
 
         <article class="surface-card chart-card">
           <div class="section-head"><h2>Realtime Charts</h2><span class="badge info">Last 60 seconds</span></div>
-          <div class="chart-grid">
-            <canvas id="cpuChart"></canvas>
-            <canvas id="rpsChart"></canvas>
-            <canvas id="connChart"></canvas>
-            <canvas id="latencyChart"></canvas>
-            <canvas id="errorChart"></canvas>
+          <p id="chartError" class="chart-error" hidden></p>
+          <div class="chart-grid" id="chartGrid">
+            <div class="chart-tile"><canvas id="cpuChart"></canvas></div>
+            <div class="chart-tile"><canvas id="rpsChart"></canvas></div>
+            <div class="chart-tile"><canvas id="connChart"></canvas></div>
+            <div class="chart-tile"><canvas id="latencyChart"></canvas></div>
+            <div class="chart-tile chart-tile-wide"><canvas id="errorChart"></canvas></div>
           </div>
         </article>
       </section>
@@ -119,7 +120,6 @@
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="/vendor/chart.js/chart.umd.js"></script>
     <script src="/static/dashboard.js"></script>
   </body>
 </html>

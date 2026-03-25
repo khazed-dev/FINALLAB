@@ -198,16 +198,28 @@ h1, h2, h3, .eyebrow, .panel-heading span:first-child {
   margin-top: 18px;
 }
 
-.chart-grid canvas {
-  min-height: 220px;
-  width: 100%;
+.chart-tile {
+  position: relative;
+  min-height: 240px;
   padding: 14px;
   border: 1px solid rgba(126, 147, 179, 0.14);
   border-radius: 18px;
   background: rgba(3, 8, 16, 0.55);
+  overflow: hidden;
 }
 
-.chart-grid canvas:last-child { grid-column: 1 / -1; }
+.chart-tile-wide { grid-column: 1 / -1; }
+
+.chart-tile canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.chart-error {
+  margin: 16px 0 0;
+  color: var(--amber);
+}
 
 .login-shell { min-height: 100vh; display: grid; place-items: center; }
 .login-card { width: min(460px, 100%); border-radius: 28px; padding: 28px; }

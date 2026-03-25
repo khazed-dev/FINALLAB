@@ -29,6 +29,7 @@ const dom = {
   topSourcesList: document.getElementById("topSourcesList"),
   logList: document.getElementById("logList"),
   defenseBadge: document.getElementById("defenseBadge"),
+  chartError: document.getElementById("chartError"),
   rateLimitState: document.getElementById("rateLimitState"),
   connLimitState: document.getElementById("connLimitState"),
   emergencyState: document.getElementById("emergencyState"),
@@ -47,6 +48,8 @@ const dom = {
 };
 
 const chartStore = {};
+let chartsReady = false;
+let pendingHistory = [];
 const statusClasses = {
   Healthy: "healthy",
   Warning: "warning",
@@ -77,7 +80,8 @@ function applyAlert(card, level) {
 }
 
 function createChart(id, label, color) {
-  const ctx = document.getElementById(id);
+  const canvas = document.getElementById(id);
+  const ctx = canvas.getContext("2d");
   return new Chart(ctx, {
     type: "line",
     data: {
@@ -121,14 +125,28 @@ function createChart(id, label, color) {
 }
 
 function initCharts() {
+  if (!window.Chart) {
+    throw new Error("Chart.js is not available");
+  }
+
   chartStore.cpu = createChart("cpuChart", "CPU %", "rgba(0, 224, 255, 1)");
   chartStore.rps = createChart("rpsChart", "Requests / Sec", "rgba(255, 184, 0, 1)");
   chartStore.conn = createChart("connChart", "Active Connections", "rgba(255, 92, 92, 1)");
   chartStore.latency = createChart("latencyChart", "Avg Response Time", "rgba(140, 124, 255, 1)");
   chartStore.error = createChart("errorChart", "5xx Error Rate", "rgba(255, 106, 148, 1)");
+  chartsReady = true;
+
+  if (pendingHistory.length) {
+    updateCharts(pendingHistory);
+  }
 }
 
 function updateCharts(points) {
+  pendingHistory = Array.isArray(points) ? points : [];
+  if (!chartsReady) {
+    return;
+  }
+
   const trimmed = points.slice(-60);
   const labels = trimmed.map((point) => new Date(point.timestamp).toLocaleTimeString());
 
@@ -144,7 +162,7 @@ function updateCharts(points) {
   chartStore.latency.data.datasets[0].data = trimmed.map((point) => point.averageResponseTime);
   chartStore.error.data.datasets[0].data = trimmed.map((point) => point.errorRate);
 
-  Object.values(chartStore).forEach((chart) => chart.update());
+  Object.values(chartStore).forEach((chart) => chart.update("none"));
 }
 
 function updateTopSources(sources) {
@@ -280,16 +298,63 @@ async function logout() {
   window.location.href = "/login";
 }
 
-dom.logoutButton?.addEventListener("click", logout);
-setInterval(refreshClock, 1000);
-refreshClock();
-bindDefenseButtons();
-initCharts();
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = src;
+    script.async = true;
+    script.onload = resolve;
+    script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+    document.head.appendChild(script);
+  });
+}
 
-const socket = io();
-socket.on("metrics:update", updateDashboard);
-socket.on("metrics:history", updateCharts);
-socket.on("logs:update", updateLogs);
-socket.on("connect_error", () => {
-  window.location.href = "/login";
-});
+async function ensureChartLibrary() {
+  if (window.Chart) {
+    return;
+  }
+
+  try {
+    await loadScript("/vendor/chart.js/chart.umd.js");
+  } catch (error) {
+    try {
+      await loadScript("https://cdn.jsdelivr.net/npm/chart.js");
+    } catch (fallbackError) {
+      throw new Error("Unable to load Chart.js");
+    }
+  }
+}
+
+function showChartError(message) {
+  if (!dom.chartError) {
+    return;
+  }
+
+  dom.chartError.hidden = false;
+  dom.chartError.textContent = message;
+}
+
+async function boot() {
+  setInterval(refreshClock, 1000);
+  refreshClock();
+  bindDefenseButtons();
+
+  try {
+    await ensureChartLibrary();
+    initCharts();
+  } catch (error) {
+    showChartError("Realtime charts could not be initialized. Check Chart.js path or browser console.");
+    console.error(error);
+  }
+
+  const socket = io();
+  socket.on("metrics:update", updateDashboard);
+  socket.on("metrics:history", updateCharts);
+  socket.on("logs:update", updateLogs);
+  socket.on("connect_error", () => {
+    window.location.href = "/login";
+  });
+}
+
+dom.logoutButton?.addEventListener("click", logout);
+boot();
